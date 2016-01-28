@@ -12,4 +12,12 @@
     <string name="unitcost">Fuel Unit Cost:</string>
     <string name="cost">Fuel Cost:</string>
     <string name="totalcost">Total Cost:</string>
+    <string name="date_format">YYYY-MM-DD</string>
+    <string name="station_format">Name of station</string>
+    <string name="km">km</string>
+    <string name="litres">L</string>
+    <string name="fuel_grade_format">Type of fuel</string>
+    <string name="unitcost_format">cents/L</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
 </resources>
