@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.RadioButton;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -14,12 +15,15 @@ import java.util.List;
 // by Sajmon on 1 July 2012
 // accessed 29 January 2016
 public class DisplayListAdapter extends ArrayAdapter<LogEntry>{
+    private int selectedRadioIndex = -1;
+    private RadioButton selectedRadio;
+
     public DisplayListAdapter(Context context, List<LogEntry> data){
         super(context, R.layout.entry_display, data);
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewEntryHolder holder= null;
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
@@ -46,7 +50,38 @@ public class DisplayListAdapter extends ArrayAdapter<LogEntry>{
         holder.getUnitcostText().setText(df1.format(getItem(position).getFuelUnitCost()));
         holder.getCostText().setText(df2.format(getItem(position).getFuelCost()));
 
+        // Strategy for radio button behaviour borrowed from
+        // http://stackoverflow.com/questions/7329856/how-to-use-radiogroup-in-listview-custom-adapter
+        // by Inon Stelman on 14 September 2011
+        // Accessed 29 January 2016
+        holder.getRadio().setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                if (position != selectedRadioIndex && selectedRadio != null) {
+                    selectedRadio.setChecked(false);
+                }
+
+                selectedRadioIndex = position;
+                selectedRadio = (RadioButton) v;
+            }
+        });
+
+
+        if(selectedRadioIndex != position){
+            holder.getRadio().setChecked(false);
+        }else{
+            holder.getRadio().setChecked(true);
+            if(selectedRadio != null && holder.getRadio() != selectedRadio){
+                selectedRadio = holder.getRadio();
+            }
+        }
 
         return convertView;
+    }
+
+    public int getSelectedIndex() {
+        return selectedRadioIndex;
     }
 }

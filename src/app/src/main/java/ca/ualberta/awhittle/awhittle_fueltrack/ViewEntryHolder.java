@@ -1,6 +1,7 @@
 package ca.ualberta.awhittle.awhittle_fueltrack;
 
 import android.view.View;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 // Strategy for displaying list items borrowed from
@@ -16,6 +17,7 @@ public class ViewEntryHolder {
     private TextView amountText = null;
     private TextView unitcostText = null;
     private TextView costText = null;
+    private RadioButton radio = null;
 
 
     public ViewEntryHolder(View entry){
@@ -69,5 +71,14 @@ public class ViewEntryHolder {
             this.costText = (TextView) entry.findViewById(R.id.text_cost);
         }
         return this.costText;
+    }
+
+    public RadioButton getRadio(){
+        if(this.radio == null){
+            this.radio = (RadioButton) entry.findViewById(R.id.radioButton);
+        }
+        entry.findViewById(R.id.radio_layout);
+
+        return this.radio;
     }
 }

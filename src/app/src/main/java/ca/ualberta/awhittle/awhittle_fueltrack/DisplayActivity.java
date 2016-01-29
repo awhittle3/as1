@@ -3,11 +3,11 @@ package ca.ualberta.awhittle.awhittle_fueltrack;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -17,18 +17,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
 public class DisplayActivity extends AppCompatActivity {
     public final static String EXTRA_ENTRY_INDEX = "ca.ualberta.awhittle.awhittle_fueltrack.entry_index";
     public static final String FILENAME = "ca.ualberta.awhittle.awhittle_fueltrack.logentries.txt";
     private static final String TAG = "DisplayActivity";
-
-    private Button newEntryButton;
-    private Button editEntryButton;
-    private RadioGroup radioEntries;
-    private ListView listView;
 
     private Gson gson;
 
@@ -42,9 +36,8 @@ public class DisplayActivity extends AppCompatActivity {
 
         gson = new Gson();
 
-        newEntryButton = (Button) findViewById(R.id.button_new);
-        editEntryButton = (Button) findViewById(R.id.button_edit);
-        radioEntries = (RadioGroup) findViewById(R.id.radio_entries);
+        Button newEntryButton = (Button) findViewById(R.id.button_new);
+        Button editEntryButton = (Button) findViewById(R.id.button_edit);
 
         // Transition to the EditEntryActivity to create a new entry
         newEntryButton.setOnClickListener(new View.OnClickListener() {
@@ -62,7 +55,7 @@ public class DisplayActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(DisplayActivity.this, EditEntryActivity.class);
                 // -1 is put if no button is checked. Behaviour creates a new entry.
-                intent.putExtra(EXTRA_ENTRY_INDEX, radioEntries.getCheckedRadioButtonId());
+                intent.putExtra(EXTRA_ENTRY_INDEX, adapter.getSelectedIndex());
                 startActivity(intent);
             }
         });
@@ -74,21 +67,27 @@ public class DisplayActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        listView = (ListView) findViewById(R.id.listView);
+        ListView listView = (ListView) findViewById(R.id.listView);
+        TextView totalCostText = (TextView) findViewById(R.id.text_totalcost);
 
         loadListFromFile();
 
+        // Hook up adapter
         adapter = new DisplayListAdapter(DisplayActivity.this, logList.getList());
         listView.setAdapter(adapter);
 
-        // TODO: Hook up total cost text
-
+        // Display total cost
+        String totalCost = getString(R.string.totalcost) + getString(R.string.dollar) + logList.getTotalCost();
+        totalCostText.setText(totalCost);
     }
 
     public static DisplayListAdapter getAdapter() {
         return adapter;
     }
 
+    /**
+     * Loads a json list from a file
+     */
     private void loadListFromFile(){
         try {
             FileInputStream fis = openFileInput(FILENAME);
@@ -107,4 +106,5 @@ public class DisplayActivity extends AppCompatActivity {
     public static LogList getLogList() {
         return logList;
     }
+
 }
