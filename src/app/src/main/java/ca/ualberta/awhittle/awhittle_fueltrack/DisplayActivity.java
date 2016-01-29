@@ -12,13 +12,9 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 
 public class DisplayActivity extends AppCompatActivity {
@@ -31,14 +27,16 @@ public class DisplayActivity extends AppCompatActivity {
     private ListView listView;
 
     private Gson gson;
-    private LogList logList;
 
+    private static LogList logList;
     private static DisplayListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display);
+
+        loadListFromFile();
 
         newEntryButton = (Button) findViewById(R.id.button_new);
         editEntryButton = (Button) findViewById(R.id.button_edit);
@@ -74,8 +72,6 @@ public class DisplayActivity extends AppCompatActivity {
 
         listView = (ListView) findViewById(R.id.listView);
 
-        loadListFromFile();
-
         adapter = new DisplayListAdapter(DisplayActivity.this, logList.getList());
         listView.setAdapter(adapter);
 
@@ -99,19 +95,7 @@ public class DisplayActivity extends AppCompatActivity {
         }
     }
 
-    public void saveListToFile(){
-        try {
-            FileOutputStream fos = openFileOutput(FILENAME, 0);
-            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
-            gson.toJson(logList, out);
-            out.flush();
-            fos.close();
-        } catch(FileNotFoundException e) {
-            // Fail if there is no file
-            throw new RuntimeException();
-        } catch (IOException e){
-            // Fail if there is an IO error
-            throw new RuntimeException();
-        }
+    public static LogList getLogList() {
+        return logList;
     }
 }

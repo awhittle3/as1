@@ -6,22 +6,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
-import java.io.InputStreamReader;
-import java.lang.reflect.Type;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.text.DecimalFormat;
 
 public class EditEntryActivity extends AppCompatActivity {
 
     private int targetIndex;
-    private LogList myData;
-    private Gson gson;
 
     private EditText editDate;
     private EditText editStation ;
@@ -34,8 +32,6 @@ public class EditEntryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_entry);
-
-        gson = new Gson();
 
         // Get all the edit text views
         editDate = (EditText) findViewById(R.id.editTextDate);
@@ -52,15 +48,43 @@ public class EditEntryActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
+                try {
+                    // Create the new entry
+                    String date = editDate.getText().toString();
+                    String station = editStation.getText().toString();
+                    double reading = Double.parseDouble(editOdo.getText().toString());
+                    String grade = editGrade.getText().toString();
+                    double amount = Double.parseDouble(editAmount.getText().toString());
+                    double unitcost = Double.parseDouble(editUnitcost.getText().toString());
 
+                    LogEntry newEntry = new LogEntry(date, station, reading, grade, amount, unitcost);
 
-                DisplayActivity.getAdapter().notifyDataSetChanged();
+                    // Add to the logList
+                    if(targetIndex == -1){
+                        DisplayActivity.getLogList().add(newEntry);
+                    } else {
+                        DisplayActivity.getLogList().set(targetIndex, newEntry);
+                    }
 
-                Intent intent = new Intent(EditEntryActivity.this, DisplayActivity.class);
-                startActivity(intent);
+                    // Save
+                    saveListToFile();
+
+                    // Notify the adapter
+                    DisplayActivity.getAdapter().notifyDataSetChanged();
+
+                    // Return to the DisplayActivity
+                    Intent intent = new Intent(EditEntryActivity.this, DisplayActivity.class);
+                    startActivity(intent);
+                } catch (NumberFormatException e){
+                    // If the user did not enter numbers, inform them
+                    Toast errorToast = Toast.makeText(EditEntryActivity.this, getString(R.string.error_numformat),
+                            Toast.LENGTH_LONG);
+                    errorToast.show();
+                }
             }
         });
 
+        // Return to DisplayActivity without doing anything with the data
         cancelButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
@@ -84,6 +108,7 @@ public class EditEntryActivity extends AppCompatActivity {
         DecimalFormat df3 = new DecimalFormat("#.000");
 
         if(targetIndex == -1) {
+            // Make the fields blank
             editDate.setText("");
             editStation.setText("");
             editOdo.setText("");
@@ -91,12 +116,36 @@ public class EditEntryActivity extends AppCompatActivity {
             editAmount.setText("");
             editUnitcost.setText("");
         } else {
-            editDate.setText(myData.get(targetIndex).getDate());
-            editStation.setText(myData.get(targetIndex).getStation());
-            editOdo.setText(df1.format(myData.get(targetIndex).getOdoReading()));
-            editGrade.setText(myData.get(targetIndex).getFuelGrade());
-            editAmount.setText(df3.format(myData.get(targetIndex).getFuelAmount()));
-            editUnitcost.setText(df1.format(myData.get(targetIndex).getFuelUnitCost()));
+            // Populate the fields with the relevant data
+            LogEntry myEntry = DisplayActivity.getLogList().get(targetIndex);
+
+            editDate.setText(myEntry.getDate());
+            editStation.setText(myEntry.getStation());
+            editOdo.setText(df1.format(myEntry.getOdoReading()));
+            editGrade.setText(myEntry.getFuelGrade());
+            editAmount.setText(df3.format(myEntry.getFuelAmount()));
+            editUnitcost.setText(df1.format(myEntry.getFuelUnitCost()));
+        }
+    }
+
+    /**
+     * Saves the data to a file
+     * Uses data from DisplayActivity
+     */
+    public void saveListToFile(){
+        try {
+            FileOutputStream fos = openFileOutput(DisplayActivity.FILENAME, 0);
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
+            Gson gson = new Gson();
+            gson.toJson(DisplayActivity.getLogList(), out);
+            out.flush();
+            fos.close();
+        } catch(FileNotFoundException e) {
+            // Fail if there is no file
+            throw new RuntimeException();
+        } catch (IOException e){
+            // Fail if there is an IO error
+            throw new RuntimeException();
         }
     }
 }
