@@ -12,9 +12,13 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 
 public class DisplayActivity extends AppCompatActivity {
@@ -26,6 +30,7 @@ public class DisplayActivity extends AppCompatActivity {
     private RadioGroup radioEntries;
     private ListView listView;
 
+    private Gson gson;
     private LogList logList;
 
     private static DisplayListAdapter adapter;
@@ -69,11 +74,21 @@ public class DisplayActivity extends AppCompatActivity {
 
         listView = (ListView) findViewById(R.id.listView);
 
-        // Load our loglist from file
+        loadListFromFile();
+
+        adapter = new DisplayListAdapter(DisplayActivity.this, logList.getList());
+        listView.setAdapter(adapter);
+
+    }
+
+    public static DisplayListAdapter getAdapter() {
+        return adapter;
+    }
+
+    private void loadListFromFile(){
         try {
             FileInputStream fis = openFileInput(FILENAME);
             BufferedReader in = new BufferedReader(new InputStreamReader(fis));
-            Gson gson = new Gson();
 
             // Took from https://google-gson.googlecode.com/svn/trunk/gson/docs/javadocs/com/google/gson/Gson.html 01-19 2016
             Type listType = new TypeToken<LogList>() {}.getType();
@@ -82,13 +97,21 @@ public class DisplayActivity extends AppCompatActivity {
             // We want to create an empty LogList
             logList = new LogList();
         }
-
-        adapter = new DisplayListAdapter(DisplayActivity.this, logList.getLogList());
-        listView.setAdapter(adapter);
-
     }
 
-    public static DisplayListAdapter getAdapter() {
-        return adapter;
+    public void saveListToFile(){
+        try {
+            FileOutputStream fos = openFileOutput(FILENAME, 0);
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
+            gson.toJson(logList, out);
+            out.flush();
+            fos.close();
+        } catch(FileNotFoundException e) {
+            // Fail if there is no file
+            throw new RuntimeException();
+        } catch (IOException e){
+            // Fail if there is an IO error
+            throw new RuntimeException();
+        }
     }
 }

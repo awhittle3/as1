@@ -52,7 +52,10 @@ public class EditEntryActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-                // TODO: Save data, put into array, notify adapter
+
+
+                DisplayActivity.getAdapter().notifyDataSetChanged();
+
                 Intent intent = new Intent(EditEntryActivity.this, DisplayActivity.class);
                 startActivity(intent);
             }
@@ -66,19 +69,6 @@ public class EditEntryActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
-
-        // Get data into LogList
-        try {
-            FileInputStream fis = openFileInput(DisplayActivity.FILENAME);
-            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
-            // Took from https://google-gson.googlecode.com/svn/trunk/gson/docs/javadocs/com/google/gson/Gson.html 01-19 2016
-            Type listType = new TypeToken<LogList>() {}.getType();
-            myData = gson.fromJson(in, listType);
-        } catch (FileNotFoundException e) {
-            myData = new LogList();
-        }
 
     }
 

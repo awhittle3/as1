@@ -5,27 +5,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LogList {
-    private List<LogEntry> logList;
+    private List<LogEntry> list;
 
     public LogList() {
-        this.logList = new ArrayList<>();
+        this.list = new ArrayList<>();
     }
 
-    public List<LogEntry> getLogList() {
-        return logList;
+    public List<LogEntry> getList() {
+        return list;
     }
 
     public void add(LogEntry entry){
-        logList.add(entry);
+        list.add(entry);
     }
 
     public LogEntry get(int index){
-        return logList.get(index);
+        return list.get(index);
+    }
+
+    public void set(int index, LogEntry entry){
+        list.set(index, entry);
     }
 
     public double getTotalCost(){
         double sum = 0.0;
-        for(LogEntry entry : logList){
+        for(LogEntry entry : list){
             sum += entry.getFuelCost();
         }
         return sum;
