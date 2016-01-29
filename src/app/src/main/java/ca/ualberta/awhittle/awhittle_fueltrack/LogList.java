@@ -19,6 +19,10 @@ public class LogList {
         logList.add(entry);
     }
 
+    public LogEntry get(int index){
+        return logList.get(index);
+    }
+
     public double getTotalCost(){
         double sum = 0.0;
         for(LogEntry entry : logList){
