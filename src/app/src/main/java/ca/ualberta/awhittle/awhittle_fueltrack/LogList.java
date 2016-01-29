@@ -1,14 +1,17 @@
 package ca.ualberta.awhittle.awhittle_fueltrack;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class LogList {
     private List<LogEntry> list;
 
-    public LogList() {
+    LogList() {
         this.list = new ArrayList<>();
+    }
+
+    LogList(List<LogEntry> list){
+        this.list = list;
     }
 
     public List<LogEntry> getList() {

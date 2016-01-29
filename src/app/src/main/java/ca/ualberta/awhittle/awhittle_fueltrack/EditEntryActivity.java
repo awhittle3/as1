@@ -137,7 +137,7 @@ public class EditEntryActivity extends AppCompatActivity {
             FileOutputStream fos = openFileOutput(DisplayActivity.FILENAME, 0);
             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
             Gson gson = new Gson();
-            gson.toJson(DisplayActivity.getLogList(), out);
+            gson.toJson(DisplayActivity.getLogList().getList(), out);
             out.flush();
             fos.close();
         } catch(FileNotFoundException e) {
