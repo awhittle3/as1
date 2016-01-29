@@ -69,7 +69,7 @@ public class DisplayActivity extends AppCompatActivity {
         ListView listView = (ListView) findViewById(R.id.listView);
         TextView totalCostText = (TextView) findViewById(R.id.text_totalcost);
 
-        DecimalFormat df2 = new DecimalFormat("#.00");
+        DecimalFormat df2 = new DecimalFormat("0.00");
 
         loadListFromFile();
 

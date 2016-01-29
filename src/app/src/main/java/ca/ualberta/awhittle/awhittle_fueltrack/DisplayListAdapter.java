@@ -28,9 +28,9 @@ public class DisplayListAdapter extends ArrayAdapter<LogEntry>{
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
         // For String formatting
-        DecimalFormat df1 = new DecimalFormat("#.0");
-        DecimalFormat df2 = new DecimalFormat("#.00");
-        DecimalFormat df3 = new DecimalFormat("#.000");
+        DecimalFormat df1 = new DecimalFormat("0.0");
+        DecimalFormat df2 = new DecimalFormat("0.00");
+        DecimalFormat df3 = new DecimalFormat("0.000");
 
         // Create the holder
         if(convertView == null){
