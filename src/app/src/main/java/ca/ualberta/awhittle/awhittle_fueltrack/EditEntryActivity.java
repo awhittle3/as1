@@ -45,6 +45,7 @@ public class EditEntryActivity extends AppCompatActivity {
         Button saveButton = (Button) findViewById(R.id.buttonCommit);
         Button cancelButton = (Button) findViewById(R.id.buttonCancel);
 
+        // Save the data and notify the adapter
         saveButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
@@ -108,7 +109,7 @@ public class EditEntryActivity extends AppCompatActivity {
         DecimalFormat df3 = new DecimalFormat("#.000");
 
         if(targetIndex == -1) {
-            // Make the fields blank
+            // Make the fields clean
             editDate.setText("");
             editStation.setText("");
             editOdo.setText("");

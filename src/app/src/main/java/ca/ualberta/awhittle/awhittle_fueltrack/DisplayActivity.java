@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -17,12 +16,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class DisplayActivity extends AppCompatActivity {
     public final static String EXTRA_ENTRY_INDEX = "ca.ualberta.awhittle.awhittle_fueltrack.entry_index";
     public static final String FILENAME = "ca.ualberta.awhittle.awhittle_fueltrack.logentries.txt";
-    private static final String TAG = "DisplayActivity";
 
     private Gson gson;
 
@@ -70,6 +69,8 @@ public class DisplayActivity extends AppCompatActivity {
         ListView listView = (ListView) findViewById(R.id.listView);
         TextView totalCostText = (TextView) findViewById(R.id.text_totalcost);
 
+        DecimalFormat df2 = new DecimalFormat("#.00");
+
         loadListFromFile();
 
         // Hook up adapter
@@ -77,7 +78,8 @@ public class DisplayActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
 
         // Display total cost
-        String totalCost = getString(R.string.totalcost) + getString(R.string.dollar) + logList.getTotalCost();
+        String totalCost = getString(R.string.totalcost) + getString(R.string.dollar)
+                + df2.format(logList.getTotalCost());
         totalCostText.setText(totalCost);
     }
 

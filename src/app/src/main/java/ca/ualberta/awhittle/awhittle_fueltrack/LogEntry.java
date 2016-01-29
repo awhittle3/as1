@@ -1,6 +1,8 @@
 package ca.ualberta.awhittle.awhittle_fueltrack;
 
-
+/**
+ * This class holds the data for a fuel log entry
+ */
 public class LogEntry {
     private String date;
     private String station;
@@ -9,6 +11,7 @@ public class LogEntry {
     private double fuelAmount;
     private double fuelUnitCost;
     private double fuelCost;
+
 
     public LogEntry(String date, String station, double reading, String grade, double amount,
                     double unitCost) {
@@ -75,6 +78,10 @@ public class LogEntry {
         return fuelCost;
     }
 
+    /**
+     * Updates fuel cost
+     * Call whenever fuelAmount and fuelUnitCost change
+     */
     private void updateFuelCost(){
         fuelCost = fuelAmount * (fuelUnitCost/100.0);
     }

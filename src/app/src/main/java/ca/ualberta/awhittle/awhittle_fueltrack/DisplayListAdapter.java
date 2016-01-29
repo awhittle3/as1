@@ -27,10 +27,12 @@ public class DisplayListAdapter extends ArrayAdapter<LogEntry>{
         ViewEntryHolder holder= null;
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
+        // For String formatting
         DecimalFormat df1 = new DecimalFormat("#.0");
         DecimalFormat df2 = new DecimalFormat("#.00");
         DecimalFormat df3 = new DecimalFormat("#.000");
 
+        // Create the holder
         if(convertView == null){
             convertView = inflater.inflate(R.layout.entry_display, null, false);
             holder = new ViewEntryHolder(convertView){};
@@ -41,19 +43,32 @@ public class DisplayListAdapter extends ArrayAdapter<LogEntry>{
 
         // Update all the fields with the entry data
         // Use Decimal Format to display numbers to proper decimal places
-        // FIXME: Add item description in front of data text
-        holder.getDateText().setText(getItem(position).getDate());
-        holder.getStationText().setText(getItem(position).getStation());
-        holder.getOdoText().setText(df1.format(getItem(position).getOdoReading()));
-        holder.getGradeText().setText(getItem(position).getFuelGrade());
-        holder.getAmountText().setText(df3.format(getItem(position).getFuelAmount()));
-        holder.getUnitcostText().setText(df1.format(getItem(position).getFuelUnitCost()));
-        holder.getCostText().setText(df2.format(getItem(position).getFuelCost()));
+        String date = getContext().getString(R.string.date) + getItem(position).getDate();
+        String station = getContext().getString(R.string.station) + getItem(position).getStation();
+        String odoReading = getContext().getString(R.string.odo)
+                + df1.format(getItem(position).getOdoReading()) + getContext().getString(R.string.km);
+        String grade = getContext().getString(R.string.grade) + getItem(position).getFuelGrade();
+        String amount = getContext().getString(R.string.amount) +
+                df3.format(getItem(position).getFuelAmount()) + getContext().getString(R.string.litres);
+        String unitcost = getContext().getString(R.string.unitcost)
+                + df1.format(getItem(position).getFuelUnitCost())
+                + getContext().getString(R.string.unitcost_format);
+        String cost = getContext().getString(R.string.cost) + getContext().getString(R.string.dollar)
+                + df2.format(getItem(position).getFuelCost());
+
+        holder.getDateText().setText(date);
+        holder.getStationText().setText(station);
+        holder.getOdoText().setText(odoReading);
+        holder.getGradeText().setText(grade);
+        holder.getAmountText().setText(amount);
+        holder.getUnitcostText().setText(unitcost);
+        holder.getCostText().setText(cost);
 
         // Strategy for radio button behaviour borrowed from
         // http://stackoverflow.com/questions/7329856/how-to-use-radiogroup-in-listview-custom-adapter
         // by Inon Stelman on 14 September 2011
         // Accessed 29 January 2016
+        // When a button is selected, unselect others
         holder.getRadio().setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -81,6 +96,9 @@ public class DisplayListAdapter extends ArrayAdapter<LogEntry>{
         return convertView;
     }
 
+    /**
+     * Returns the index of the selected radio button
+     */
     public int getSelectedIndex() {
         return selectedRadioIndex;
     }
