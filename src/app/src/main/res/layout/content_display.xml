@@ -49,47 +49,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/radio_entries">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/date"
-                    android:id="@+id/text_date" />
 
-                <TextView
+                <ListView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/station"
-                    android:id="@+id/text_station" />
+                    android:id="@+id/listView"
+                    android:smoothScrollbar="false" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/odo"
-                    android:id="@+id/text_odo" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/grade"
-                    android:id="@+id/text_grade" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/amount"
-                    android:id="@+id/text_amount" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/unitcost"
-                    android:id="@+id/text_unitcost" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/cost"
-                    android:id="@+id/text_cost" />
             </RadioGroup>
 
         </LinearLayout>

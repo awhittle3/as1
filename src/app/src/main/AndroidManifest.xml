@@ -21,7 +21,10 @@
         <activity
             android:name=".EditEntryActivity"
             android:label="@string/title_activity_edit_entry"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="ca.ualberta.awhittle.awhittle_fueltrack.DisplayActivity" /></activity>
     </application>
 
 </manifest>
