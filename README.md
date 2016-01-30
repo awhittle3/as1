@@ -8,15 +8,15 @@ for each entry and the total cost of all entries are automatically calculated.
 
 Directory Structure:
 
-.
-+-- README.md
-+-- LICENSE
-+-- src
-|   +-- app
-|   |    +-- ...
-|   +-- ...
-+--doc
-|   +-- awhittle_FuelTrack_UML.png
-|   +-- awhittle_FuelTrack_UML.dia
-+--bin
-    +-- app-debug.apk
+.  
++-- README.md  
++-- LICENSE  
++-- src  
+|   +-- app  
+|   |    +-- ...  
+|   +-- ...  
++--doc  
+|   +-- awhittle_FuelTrack_UML.png  
+|   +-- awhittle_FuelTrack_UML.dia  
++--bin  
+    +-- app-debug.apk  
